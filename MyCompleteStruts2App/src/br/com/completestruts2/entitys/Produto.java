@@ -2,13 +2,18 @@ package br.com.completestruts2.entitys;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.List;
 
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -19,7 +24,9 @@ import javax.persistence.Table;
 	@NamedQuery( name = "Produto.findById",
     query = "SELECT p FROM Produto p WHERE p.id = :id"),
 	@NamedQuery( name = "Produto.findByNome",
-    query = "SELECT p FROM Produto p WHERE p.nome = :nome")
+    query = "SELECT p FROM Produto p WHERE p.nome = :nome"),
+	@NamedQuery( name = "Produto.findByPreco",
+    query = "SELECT p FROM Produto p WHERE p.preco = :preco")
 	
 })
 public class Produto implements Serializable{
@@ -29,6 +36,7 @@ public class Produto implements Serializable{
 	
 	
 	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Basic(optional = false)
 	@Column(name = "id",nullable = false)
 	private Long id;
@@ -38,8 +46,11 @@ public class Produto implements Serializable{
 	private String nome;
 	
 	@Basic(optional = false)	
-	@Column(name = "preco",nullable = false, columnDefinition = "DECIMAL(16,2)")
-	private BigDecimal preco;
+	@Column(name = "preco",nullable = false, precision = 16, scale = 2)
+	private BigDecimal preco;	
+	
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "produtoId")
+	private List<FiscalItem> fiscalItemList;
 
 	public Produto(Long id, String nome, BigDecimal preco) {
 		super();
@@ -70,6 +81,15 @@ public class Produto implements Serializable{
 
 	public void setPreco(BigDecimal preco) {
 		this.preco = preco;
+	}	
+	
+
+	public List<FiscalItem> getFiscalItemList() {
+		return fiscalItemList;
+	}
+
+	public void setFiscalItemList(List<FiscalItem> fiscalItemList) {
+		this.fiscalItemList = fiscalItemList;
 	}
 
 	@Override

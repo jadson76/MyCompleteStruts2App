@@ -34,53 +34,7 @@ public class JPAUtil {
 		EntityManager em = emf.createEntityManager();
 		em.getTransaction().begin();
 		return em;
-	}
-	
-	public int executeCommand(String ejbql, Object... values) {
-		EntityManager em  = getEntityManager();
-		Query query = em.createQuery(ejbql);
-		if(values != null) {
-			for(int i = 0; i < values.length; i++) {
-				query.setParameter(i, values[i]);
-			}	
-		}		
-		int toReturn = query.executeUpdate();
-		em.getTransaction().commit();
-		em.close();
-		return toReturn;		
-	}
-	
-	public <T> T getPurePojo(Class<T>  classToCast, String ejbql, Object... values) {
-		EntityManager em = getEntityManager();
-		Query query = em.createQuery(ejbql);
-		if(values != null) {
-			for(int i = 0; i < values.length; i++) {
-				query.setParameter(i, values[i]);
-			}	
-		}
-		T entityToReturn = (T) query.getSingleResult();
-		em.getTransaction().commit();
-		em.close();
-		return entityToReturn;		
-		
-	}
-	
-	public <T> List<T> getPureList(Class<T>  classToCast, String ejbql, Object... values) {
-		EntityManager em = getEntityManager();
-		Query query = em.createQuery(ejbql);
-		if(values != null) {
-			for(int i = 0; i < values.length; i++) {
-				query.setParameter(i, values[i]);
-			}	
-		}
-		List<T> listToReturn =  query.getResultList();
-		em.getTransaction().commit();
-		em.close();
-		return listToReturn;		
-		
-	}
-	
-	
+	}	
 
 	
 }
